@@ -1,0 +1,125 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "61b83804ac094e1b4524",
+  "position": {
+    "x": 30,
+    "y": 660,
+    "z": 8,
+    "height": 300,
+    "width": 1860,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "What this means",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Merchants drive the count, people drive the money.  ",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "P2M is ~63% of transactions but only ~29% of value.",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Ticket sizes tell the story.  ",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "A person-to-person transfer averages ~₹2,500 vs ~₹600 for a merchant payment (about 4×), so UPI is now the default for small everyday spends.",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Implication.  ",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "A revenue model that takes a percentage of each payment's value (MDR) earns little on these payments. Merchant software, credit on UPI and lending are better bets.",
+                    "textStyle": {
+                      "fontSize": "14pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

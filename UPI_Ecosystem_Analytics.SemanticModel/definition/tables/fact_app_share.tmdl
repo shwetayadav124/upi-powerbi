@@ -1,0 +1,51 @@
+table fact_app_share
+	lineageTag: 1e59e676-f46e-4d74-b4ca-a888e3df8077
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c6765e21-1fc5-4936-9da5-2724c0e3265a
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column app_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e2ba277e-8ac9-478d-9975-48fcba5344cf
+		summarizeBy: none
+		sourceColumn: app_id
+
+	column volume_share_pct
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 9388f7bf-b9da-4485-ae1e-482db65196e8
+		summarizeBy: sum
+		sourceColumn: volume_share_pct
+
+	column value_share_pct
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 3051b41f-02c5-4022-9f7f-2a17dbb796f3
+		summarizeBy: sum
+		sourceColumn: value_share_pct
+
+	column source
+		dataType: string
+		lineageTag: 18f82b66-9e01-47cc-ba27-cb9eb4d93dec
+		summarizeBy: none
+		sourceColumn: source
+
+	partition fact_app_share = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_app_share.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date_key", Int64.Type}, {"app_id", Int64.Type}, {"volume_share_pct", type number}, {"value_share_pct", type number}, {"source", type text}}, "en-US")
+				in
+				    Typed
+

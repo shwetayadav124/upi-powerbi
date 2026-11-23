@@ -1,0 +1,53 @@
+table fact_concentration
+	lineageTag: 5e4037f1-2ba2-437d-a358-6c86503b42dc
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e0673870-1535-443b-903b-a6f15fd9a035
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column top2_share_pct
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 89304956-8479-4b5f-b3c0-0bc2bf0b1b0e
+		summarizeBy: sum
+		sourceColumn: top2_share_pct
+
+	column top3_share_pct
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 1df94ede-2143-4a09-8c2c-9e28d5924f0b
+		summarizeBy: sum
+		sourceColumn: top3_share_pct
+
+	column hhi_lower_bound
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: d635b6c0-026e-4e45-bc0f-9bb961ecbd5f
+		summarizeBy: sum
+		sourceColumn: hhi_lower_bound
+
+	column apps_above_30pct_cap
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1918f04d-0df1-4c7a-b6cd-82c88b10540f
+		summarizeBy: none
+		sourceColumn: apps_above_30pct_cap
+
+	partition fact_concentration = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_concentration.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date_key", Int64.Type}, {"top2_share_pct", type number}, {"top3_share_pct", type number}, {"hhi_lower_bound", type number}, {"apps_above_30pct_cap", Int64.Type}}, "en-US")
+				in
+				    Typed
+

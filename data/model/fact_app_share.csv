@@ -1,0 +1,36 @@
+date_key,app_id,volume_share_pct,value_share_pct,source
+20250601,9,46.46,,Business Standard (NPCI data)
+20250601,5,35.56,,Business Standard (NPCI data)
+20250601,8,6.9,,Business Standard (NPCI data)
+20250601,6,2.2,,Business Standard (NPCI data)
+20251201,9,45.35,48.68,Angel One (NPCI data)
+20260101,9,45.7,48.6,Angel One (NPCI data)
+20260101,5,33.3,33.8,Angel One (NPCI data)
+20260101,8,7.7,6.4,Angel One (NPCI data)
+20260301,9,46.7,,Inc42 (NPCI data)
+20260301,5,33.51,,Inc42 (NPCI data)
+20260301,8,7.87,,Inc42 (NPCI data)
+20260401,9,47.07,,Inc42 (NPCI data)
+20260401,5,33.54,,Inc42 (NPCI data)
+20260401,8,8.1,,Inc42 (NPCI data)
+20260501,9,46.26,49.06,StartupTalky (NPCI data)
+20260501,5,32.75,33.54,StartupTalky (NPCI data)
+20260501,8,7.91,6.66,StartupTalky (NPCI data)
+20260501,6,3.6,,Adda247 (NPCI data)
+20260501,11,1.8,,Adda247 (NPCI data)
+20260501,2,0.98,,Adda247 (NPCI data)
+20260501,4,0.85,,Adda247 (NPCI data)
+20260501,3,0.68,,Adda247 (NPCI data)
+20260501,10,0.65,,Adda247 (NPCI data)
+20260501,1,0.38,,Adda247 (NPCI data)
+20260601,9,46.2,,Analytics Insight (NPCI data)
+20260601,5,32.6,,Analytics Insight (NPCI data)
+20260801,9,45.64,47.82,StartupTalky (NPCI data)
+20260801,5,32.26,33.78,StartupTalky (NPCI data)
+20260801,8,8.03,6.87,StartupTalky (NPCI data)
+20250601,7,8.88,,Derived: 100 - listed apps
+20260101,7,13.3,,Derived: 100 - listed apps
+20260301,7,11.92,,Derived: 100 - listed apps
+20260401,7,11.29,,Derived: 100 - listed apps
+20260501,7,4.14,,Derived: 100 - listed apps
+20260801,7,14.07,,Derived: 100 - listed apps

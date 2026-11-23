@@ -1,0 +1,39 @@
+table dim_app
+	lineageTag: 7eb27d15-363a-4785-9751-9c2534be1801
+
+	column app_id
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c1d1cf3f-d072-4f90-9589-15a9ef0b077d
+		summarizeBy: none
+		sourceColumn: app_id
+
+	column app
+		dataType: string
+		lineageTag: be01a95c-c957-4c1d-8e9b-8299ae0dad02
+		summarizeBy: none
+		sourceColumn: app
+
+	column parent
+		dataType: string
+		lineageTag: 2ae18238-74b7-4326-ad68-8032daa7e073
+		summarizeBy: none
+		sourceColumn: parent
+
+	column app_group
+		dataType: string
+		lineageTag: 932059ec-77ca-40af-9256-e0986cf27d8e
+		summarizeBy: none
+		sourceColumn: app_group
+
+	partition dim_app = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_app.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"app_id", Int64.Type}, {"app", type text}, {"parent", type text}, {"app_group", type text}}, "en-US")
+				in
+				    Typed
+

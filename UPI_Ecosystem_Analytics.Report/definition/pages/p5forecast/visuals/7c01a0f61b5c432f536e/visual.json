@@ -1,0 +1,154 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "7c01a0f61b5c432f536e",
+  "position": {
+    "x": 1350,
+    "y": 670,
+    "z": 7,
+    "height": 440,
+    "width": 540,
+    "tabOrder": 7
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "Method",
+                    "textStyle": {
+                      "fontSize": "15pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Model choice.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "Compared SARIMA variants and Holt-Winters. Holt-Winters won on back-test error (0.29% over 6 months, 0.52% over 12) and gives a growth path in line with recent YoY growth.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Interval.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "80% band from residual spread on the log scale, widening with horizon.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  What-if.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "Pick extra annual growth (top right) to see a purple scenario line and its 12-month total next to the model's base case.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Automation.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "refresh.bat reruns the Python pipeline; click Refresh in Power BI and everything updates.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

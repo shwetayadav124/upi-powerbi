@@ -1,0 +1,12 @@
+app_id,app,parent,app_group
+1,Amazon Pay,Amazon,Challengers
+2,BHIM,NPCI,Challengers
+3,CRED,CRED,Challengers
+4,FamPay,FamPay,Challengers
+5,Google Pay,Alphabet,Google Pay
+6,Navi,Navi Technologies,Challengers
+7,Others,Long tail,Others
+8,Paytm,One97 Communications,Paytm
+9,PhonePe,Walmart (Flipkart group),PhonePe
+10,WhatsApp Pay,Meta,Challengers
+11,super.money,Flipkart,Challengers

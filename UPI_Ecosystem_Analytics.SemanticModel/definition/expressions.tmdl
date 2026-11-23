@@ -1,0 +1,5 @@
+expression DataFolder = "C:\Users\SHWETA YADAV\Documents\upi-powerbi\data\model\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 941333a9-8f86-4c9b-a090-2a92f4a7b27f
+
+	annotation PBI_ResultType = Text
+

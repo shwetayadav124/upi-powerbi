@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "9d0029b982de9a4c4f14",
+  "position": {
+    "x": 30,
+    "y": 75,
+    "z": 0,
+    "height": 95,
+    "width": 1000,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "UPI Ecosystem Analytics: Executive Overview",
+                    "textStyle": {
+                      "fontSize": "24pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "India's Unified Payments Interface · NPCI monthly data, Oct 2022 – Oct 2026 · forecast to Oct 2027",
+                    "textStyle": {
+                      "fontSize": "11pt",
+                      "color": "#5A6270"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

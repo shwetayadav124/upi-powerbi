@@ -1,0 +1,84 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "20027ede7d93714f1e06",
+  "position": {
+    "x": 30,
+    "y": 970,
+    "z": 8,
+    "height": 140,
+    "width": 1860,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Growth is decelerating, not stalling.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "YoY growth slid from 50%+ in 2023 to ~23% in 2026 while absolute monthly additions keep rising.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  February dips are a calendar effect.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "Daily averages keep climbing through every short month; festive Oct–Nov and year-end March are the peaks.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

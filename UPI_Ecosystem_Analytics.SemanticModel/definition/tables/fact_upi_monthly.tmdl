@@ -1,0 +1,75 @@
+table fact_upi_monthly
+	lineageTag: 57c4de91-e0be-4164-9b9c-38ea9f67ffec
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c230b4b3-a1c8-4124-8d98-46f28e963017
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column banks_live
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 78eda677-6e08-467a-abef-d0e653c6c057
+		summarizeBy: none
+		sourceColumn: banks_live
+
+	column volume_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 63f5174e-b86d-40ad-937f-fc453373b57b
+		summarizeBy: sum
+		sourceColumn: volume_mn
+
+	column value_cr
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 734184fd-8ddf-4653-9bb9-0e80fdc0447f
+		summarizeBy: sum
+		sourceColumn: value_cr
+
+	column days_in_month
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f0d448b8-711d-4e3d-846a-2b323ab368bb
+		summarizeBy: none
+		sourceColumn: days_in_month
+
+	column avg_daily_volume_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: e7de140b-fdfc-41ba-a430-73dac21a5ef8
+		summarizeBy: sum
+		sourceColumn: avg_daily_volume_mn
+
+	column avg_ticket_rs
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 1a7ad7df-5362-4e0a-a3f5-c9cd664d4e79
+		summarizeBy: sum
+		sourceColumn: avg_ticket_rs
+
+	column source
+		dataType: string
+		lineageTag: 45561e88-0442-45e2-8d88-465f84137e64
+		summarizeBy: none
+		sourceColumn: source
+
+	partition fact_upi_monthly = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_upi_monthly.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date_key", Int64.Type}, {"banks_live", Int64.Type}, {"volume_mn", type number}, {"value_cr", type number}, {"days_in_month", Int64.Type}, {"avg_daily_volume_mn", type number}, {"avg_ticket_rs", type number}, {"source", type text}}, "en-US")
+				in
+				    Typed
+

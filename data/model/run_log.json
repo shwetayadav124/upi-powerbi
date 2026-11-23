@@ -1,0 +1,13 @@
+{
+  "model": "Holt-Winters additive trend + 12-month seasonality on log(volume)",
+  "backtest_months": 6,
+  "backtest_mape_pct": 0.29,
+  "forecast_horizon_months": 12,
+  "last_actual_month": "Oct 2026",
+  "forecast_end_month": "Oct 2027",
+  "forecast_end_volume_mn": 30813.1,
+  "run_at": "2026-11-23T14:51:46",
+  "input": "seed",
+  "months_of_actuals": 49,
+  "months_with_value": 49
+}

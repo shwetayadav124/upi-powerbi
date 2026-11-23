@@ -1,0 +1,231 @@
+// =====================================================================
+// UPI Ecosystem Analytics - DAX measures
+// Create an empty table called _Measures (Home > Enter data > OK),
+// then add each measure below to it (Modeling > New measure).
+// Time-intelligence uses EDATE on dim_date[month_date], so it works on a
+// monthly date table without needing "Mark as date table".
+// =====================================================================
+
+// ---------- Core volume / value ----------
+Total Volume (Mn) = SUM ( fact_upi_monthly[volume_mn] )
+
+Total Volume (Bn) = DIVIDE ( [Total Volume (Mn)], 1000 )
+
+Total Value (Lakh Cr) = DIVIDE ( SUM ( fact_upi_monthly[value_cr] ), 100000 )
+
+Avg Daily Volume (Mn) =
+DIVIDE ( [Total Volume (Mn)], SUM ( fact_upi_monthly[days_in_month] ) )
+
+// Only counts months where value is available, so the ratio stays honest
+Avg Ticket Size (Rs) =
+VAR ValueRs = SUM ( fact_upi_monthly[value_cr] ) * 1e7
+VAR CountTx =
+    CALCULATE (
+        SUM ( fact_upi_monthly[volume_mn] ),
+        NOT ISBLANK ( fact_upi_monthly[value_cr] )
+    ) * 1e6
+RETURN DIVIDE ( ValueRs, CountTx )
+
+Banks Live = MAX ( fact_upi_monthly[banks_live] )
+
+Latest Month Value (Lakh Cr) =
+VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Value (Lakh Cr)] ) ), dim_date[month_date] )
+RETURN CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+
+Latest Avg Ticket (Rs) =
+VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Value (Lakh Cr)] ) ), dim_date[month_date] )
+RETURN CALCULATE ( [Avg Ticket Size (Rs)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+
+// ---------- Time intelligence ----------
+Volume PM (Mn) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ),
+        dim_date[month_date] = EDATE ( CurMonth, -1 ) )
+
+Volume PY (Mn) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ),
+        dim_date[month_date] = EDATE ( CurMonth, -12 ) )
+
+// Latest month with actuals in the current selection (a single month in a month-level visual)
+Volume Current Month (Mn) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = CurMonth )
+
+Volume MoM % = DIVIDE ( [Volume Current Month (Mn)] - [Volume PM (Mn)], [Volume PM (Mn)] )
+
+Volume YoY % = DIVIDE ( [Volume Current Month (Mn)] - [Volume PY (Mn)], [Volume PY (Mn)] )
+
+Value PY (Lakh Cr) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ),
+        dim_date[month_date] = EDATE ( CurMonth, -12 ) )
+
+Value YoY % =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+VAR Cur = CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = CurMonth )
+RETURN DIVIDE ( Cur - [Value PY (Lakh Cr)], [Value PY (Lakh Cr)] )
+
+Volume 3M Rolling Avg (Mn) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    CALCULATE ( AVERAGEX ( VALUES ( dim_date[month_date] ), [Total Volume (Mn)] ),
+        REMOVEFILTERS ( dim_date ),
+        dim_date[month_date] > EDATE ( CurMonth, -3 ),
+        dim_date[month_date] <= CurMonth )
+
+Volume FYTD (Bn) =
+VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+VAR CurFY = LOOKUPVALUE ( dim_date[fiscal_year], dim_date[month_date], CurMonth )
+RETURN
+    CALCULATE ( [Total Volume (Bn)], REMOVEFILTERS ( dim_date ),
+        dim_date[fiscal_year] = CurFY, dim_date[month_date] <= CurMonth )
+
+// Compound growth between first and last month in the current selection
+Volume CAGR % =
+VAR MonthsWithData = FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) )
+VAR FirstM = MINX ( MonthsWithData, dim_date[month_date] )
+VAR LastM  = MAXX ( MonthsWithData, dim_date[month_date] )
+VAR V0 = CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = FirstM )
+VAR V1 = CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+VAR Years = DATEDIFF ( FirstM, LastM, MONTH ) / 12
+RETURN IF ( Years > 0, ( V1 / V0 ) ^ ( 1 / Years ) - 1 )
+
+Peak Month =
+VAR T = ADDCOLUMNS ( VALUES ( dim_date[month_year] ), "@v", [Total Volume (Mn)] )
+RETURN MAXX ( TOPN ( 1, T, [@v], DESC ), dim_date[month_year] )
+
+Latest Month Volume (Bn) =
+VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN CALCULATE ( [Total Volume (Bn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+
+// ---------- Forecast ----------
+Forecast Volume (Bn) =
+DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+
+Forecast Lower 80 (Bn) =
+DIVIDE ( CALCULATE ( SUM ( fact_forecast[lower_80_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+
+Forecast Upper 80 (Bn) =
+DIVIDE ( CALCULATE ( SUM ( fact_forecast[upper_80_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+
+Forecast Next 12M Total (Bn) = [Forecast Volume (Bn)]
+
+Forecast End Month Volume (Bn) =
+VAR LastF = CALCULATE ( MAX ( fact_forecast[date_key] ), fact_forecast[type] = "Forecast" )
+RETURN DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast", fact_forecast[date_key] = LastF ), 1000 )
+
+Backtest Volume (Bn) =
+DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Backtest" ), 1000 )
+
+Backtest MAPE % =
+VAR T =
+    FILTER (
+        ADDCOLUMNS ( VALUES ( dim_date[month_date] ),
+            "@a", [Total Volume (Bn)], "@f", [Backtest Volume (Bn)] ),
+        NOT ISBLANK ( [@f] ) && NOT ISBLANK ( [@a] ) )
+RETURN AVERAGEX ( T, ABS ( [@f] - [@a] ) / [@a] )
+
+// ---------- Market share & concentration ----------
+// Sum within a month (so app groups add up), average across months
+App Volume Share % =
+DIVIDE ( AVERAGEX ( VALUES ( dim_date[month_date] ), CALCULATE ( SUM ( fact_app_share[volume_share_pct] ) ) ), 100 )
+
+App Value Share % =
+DIVIDE ( AVERAGEX ( VALUES ( dim_date[month_date] ), CALCULATE ( SUM ( fact_app_share[value_share_pct] ) ) ), 100 )
+
+Gap to 30% Cap (pp) = ( [App Volume Share %] - 0.30 ) * 100
+
+Top 2 Share % = DIVIDE ( AVERAGE ( fact_concentration[top2_share_pct] ), 100 )
+
+Top 3 Share % = DIVIDE ( AVERAGE ( fact_concentration[top3_share_pct] ), 100 )
+
+HHI (lower bound) = AVERAGE ( fact_concentration[hhi_lower_bound] )
+
+Market Structure =
+VAR H = [HHI (lower bound)]
+RETURN SWITCH ( TRUE (),
+    ISBLANK ( H ), BLANK (),
+    H > 2500, "Highly concentrated",
+    H > 1500, "Moderately concentrated",
+    "Competitive" )
+
+Apps Above 30% Cap = MAX ( fact_concentration[apps_above_30pct_cap] )
+
+// ---------- P2P vs P2M ----------
+Payment Volume (Mn) = SUM ( fact_p2p_p2m[volume_mn] )
+
+Payment Value (Lakh Cr) = DIVIDE ( SUM ( fact_p2p_p2m[value_cr] ), 100000 )
+
+P2M Volume Share % =
+DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2M" ),
+         SUM ( fact_p2p_p2m[volume_mn] ) )
+
+P2M Value Share % =
+DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2M" ),
+         SUM ( fact_p2p_p2m[value_cr] ) )
+
+P2P Avg Ticket (Rs) =
+DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2P" ) * 1e7,
+         CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2P" ) * 1e6 )
+
+P2M Avg Ticket (Rs) =
+DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2M" ) * 1e7,
+         CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2M" ) * 1e6 )
+
+// ---------- Dynamic text / UX ----------
+Data Through =
+"Data through " & FORMAT (
+    MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] ),
+    "mmm yyyy" )
+
+Overview Title =
+"UPI processed " & FORMAT ( [Latest Month Volume (Bn)], "0.0" ) & " bn transactions in the latest month - "
+    & FORMAT ( CALCULATE ( [Volume YoY %], LASTNONBLANK ( dim_date[month_date], [Total Volume (Mn)] ) ), "0%" )
+    & " up year on year"
+
+YoY Colour =
+IF ( [Volume YoY %] >= 0.25, "#1F4E79", IF ( [Volume YoY %] >= 0.15, "#6C8EBF", "#E07A1F" ) )
+
+Selected Month Label =
+IF ( HASONEVALUE ( dim_date[month_year] ), "Month: " & VALUES ( dim_date[month_year] ), "Month: all (drill through from a chart)" )
+
+// ---------- What-if: growth scenario ----------
+Growth Adjustment Value = SELECTEDVALUE ( 'Growth Adjustment'[Growth Adjustment], 0 )
+
+// Compounds the chosen extra annual growth onto the model forecast
+Scenario Forecast (Bn) =
+VAR Adj = [Growth Adjustment Value]
+VAR LastActual = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+RETURN
+    DIVIDE (
+        SUMX (
+            VALUES ( dim_date[month_date] ),
+            VAR F = CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast" )
+            VAR H = DATEDIFF ( LastActual, dim_date[month_date], MONTH )
+            RETURN IF ( NOT ISBLANK ( F ), F * ( 1 + Adj ) ^ ( H / 12 ) )
+        ),
+        1000
+    )
+
+Scenario vs Base (Bn) = [Scenario Forecast (Bn)] - [Forecast Volume (Bn)]
+
+// ---------- What-if: per-app market-share cap ----------
+Cap Value = SELECTEDVALUE ( 'App Cap'[App Cap], 0.30 )
+
+Cap Colour = IF ( [App Volume Share %] > [Cap Value], "#C0392B", "#1F4E79" )
+
+Share Above Cap (pp) =
+SUMX (
+    FILTER ( VALUES ( dim_app[app] ), dim_app[app] <> "Others" ),
+    MAX ( 0, [App Volume Share %] - [Cap Value] )
+) * 100
+
+Apps Over Selected Cap =
+COUNTROWS (
+    FILTER ( VALUES ( dim_app[app] ), dim_app[app] <> "Others" && [App Volume Share %] > [Cap Value] )
+)

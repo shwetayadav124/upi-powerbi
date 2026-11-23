@@ -1,0 +1,49 @@
+table fact_p2p_p2m
+	lineageTag: 31153ccc-09be-4a3d-9e04-8603bd09c172
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c561b2e5-6ccc-4771-960d-f3feed09f83b
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column type
+		dataType: string
+		lineageTag: e8fd5867-74a9-4d87-adce-2bad47d2ebc5
+		summarizeBy: none
+		sourceColumn: type
+
+	column volume_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: c7ad3d45-d900-4d0b-bcc4-f911aeef7426
+		summarizeBy: sum
+		sourceColumn: volume_mn
+
+	column value_cr
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 735788f3-cf38-475b-b7eb-3b01f795986a
+		summarizeBy: sum
+		sourceColumn: value_cr
+
+	column source
+		dataType: string
+		lineageTag: 7cdaff3a-720a-4d1d-99c6-91180b2f2375
+		summarizeBy: none
+		sourceColumn: source
+
+	partition fact_p2p_p2m = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_p2p_p2m.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date_key", Int64.Type}, {"type", type text}, {"volume_mn", type number}, {"value_cr", type number}, {"source", type text}}, "en-US")
+				in
+				    Typed
+

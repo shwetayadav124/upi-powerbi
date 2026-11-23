@@ -1,0 +1,16 @@
+table 'Growth Adjustment'
+	lineageTag: 3bff4e4d-79ef-4933-bbaf-9cd169403bc7
+
+	column 'Growth Adjustment'
+		dataType: double
+		formatString: +0%;-0%;0%
+		lineageTag: 69faee96-f1de-473a-8ae2-0fab1a17b59f
+		summarizeBy: none
+		sourceColumn: [Value]
+
+	partition 'Growth Adjustment' = calculated
+		mode: import
+		source = GENERATESERIES ( -0.10, 0.10, 0.02 )
+
+	annotation PBI_Id = what_if_growth_adjustment
+

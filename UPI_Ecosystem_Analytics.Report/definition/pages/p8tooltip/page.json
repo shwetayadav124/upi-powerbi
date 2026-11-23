@@ -1,0 +1,51 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "p8tooltip",
+  "displayName": "Month Tooltip",
+  "displayOption": "FitToPage",
+  "height": 300,
+  "width": 480,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "aa51ef562a08eb7a7860",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "month_date"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "bc8da5ac3b5df84c40be",
+    "type": "Tooltip",
+    "parameters": [
+      {
+        "name": "2a1546a1667005025550",
+        "boundFilter": "aa51ef562a08eb7a7860",
+        "asAggregation": false,
+        "qnaSingleSelectRequired": false,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "month_date"
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode",
+  "type": "Tooltip"
+}

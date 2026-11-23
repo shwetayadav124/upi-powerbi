@@ -1,0 +1,113 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "ed94e7d647af8938ecad",
+  "position": {
+    "x": 1150,
+    "y": 830,
+    "z": 8,
+    "height": 170,
+    "width": 740,
+    "tabOrder": 8
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Highly concentrated.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "HHI stays above 3,000 (above 2,500 counts as highly concentrated).",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Duopoly is easing slowly.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "Top-2 share fell from ~82% (Jun 2025) to ~78% (Aug 2026); the top 3 went from 95% (Jan 2024) to ~86%.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "■  Try it.  ",
+                    "textStyle": {
+                      "fontSize": "13pt",
+                      "fontWeight": "bold",
+                      "color": "#1F4E79"
+                    }
+                  },
+                  {
+                    "value": "Pick a cap (top right): bars above it turn red, and the card below shows how many percentage points of volume would have to move to other apps. At 30%, that's ~18 pp.",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#1A1A1A"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": " ",
+                    "textStyle": {
+                      "fontSize": "6pt"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

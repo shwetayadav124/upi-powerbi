@@ -1,0 +1,28 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["DataFolder","dim_date","dim_app","fact_upi_monthly","fact_forecast","fact_app_share","fact_concentration","fact_p2p_p2m"]
+
+ref table dim_date
+ref table dim_app
+ref table fact_upi_monthly
+ref table fact_forecast
+ref table fact_app_share
+ref table fact_concentration
+ref table fact_p2p_p2m
+ref table _Measures
+ref table 'Growth Adjustment'
+ref table 'App Cap'
+
+ref cultureInfo en-US
+

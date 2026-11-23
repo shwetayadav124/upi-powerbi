@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "p7monthdetail",
+  "displayName": "Month Detail",
+  "displayOption": "FitToPage",
+  "height": 1140,
+  "width": 1920,
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "5ff21d47b7d09224d801",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "month_year"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "Drillthrough"
+      }
+    ]
+  },
+  "pageBinding": {
+    "name": "446bcec8a591a8c53b9f",
+    "type": "Drillthrough",
+    "parameters": [
+      {
+        "name": "327a1d1c1110cfeb181a",
+        "boundFilter": "5ff21d47b7d09224d801",
+        "asAggregation": false,
+        "qnaSingleSelectRequired": false,
+        "fieldExpr": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dim_date"
+              }
+            },
+            "Property": "month_year"
+          }
+        }
+      }
+    ]
+  },
+  "visibility": "HiddenInViewMode"
+}

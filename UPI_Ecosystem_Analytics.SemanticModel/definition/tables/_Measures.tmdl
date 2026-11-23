@@ -1,0 +1,365 @@
+table _Measures
+	lineageTag: b79d421b-0f95-491d-bb49-a3e575dda448
+
+	measure 'Total Volume (Mn)' = SUM ( fact_upi_monthly[volume_mn] )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: c493ca9b-841c-46f9-88ba-5a13299fede5
+
+	measure 'Total Volume (Bn)' = DIVIDE ( [Total Volume (Mn)], 1000 )
+		formatString: #,0.0
+		displayFolder: Core
+		lineageTag: 65d43cfb-69e8-4ee1-befd-7039afd57daf
+
+	measure 'Total Value (Lakh Cr)' = DIVIDE ( SUM ( fact_upi_monthly[value_cr] ), 100000 )
+		formatString: #,0.0
+		displayFolder: Core
+		lineageTag: 13ef8d91-a766-446d-8bc7-f4e1aed1bbb8
+
+	measure 'Avg Daily Volume (Mn)' = DIVIDE ( [Total Volume (Mn)], SUM ( fact_upi_monthly[days_in_month] ) )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: f862d22b-3748-440c-9e34-69a0100073a6
+
+	measure 'Avg Ticket Size (Rs)' =
+			VAR ValueRs = SUM ( fact_upi_monthly[value_cr] ) * 1e7
+			VAR CountTx =
+			    CALCULATE (
+			        SUM ( fact_upi_monthly[volume_mn] ),
+			        NOT ISBLANK ( fact_upi_monthly[value_cr] )
+			    ) * 1e6
+			RETURN DIVIDE ( ValueRs, CountTx )
+		formatString: ₹#,0
+		displayFolder: Core
+		lineageTag: 4249665e-2998-4d78-b934-b1d11cc3639e
+
+	measure 'Banks Live' = MAX ( fact_upi_monthly[banks_live] )
+		displayFolder: Core
+		lineageTag: 7466e1e7-a4eb-4f22-8c58-0f46d074457e
+
+	measure 'Volume PM (Mn)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ),
+			        dim_date[month_date] = EDATE ( CurMonth, -1 ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: a4e5a418-8aa6-4164-998b-c4187b76c79a
+
+	measure 'Volume PY (Mn)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ),
+			        dim_date[month_date] = EDATE ( CurMonth, -12 ) )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: 19a6a448-36c9-4e4c-b26f-2d66a429df2b
+
+	measure 'Volume MoM %' = DIVIDE ( [Volume Current Month (Mn)] - [Volume PM (Mn)], [Volume PM (Mn)] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 7f3504d3-13a4-4229-ac0c-f156447eb9d4
+
+	measure 'Volume YoY %' = DIVIDE ( [Volume Current Month (Mn)] - [Volume PY (Mn)], [Volume PY (Mn)] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: a3cd7ac4-d417-4e02-931c-1b8eab27a674
+
+	measure 'Value PY (Lakh Cr)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ),
+			        dim_date[month_date] = EDATE ( CurMonth, -12 ) )
+		formatString: #,0.0
+		displayFolder: Time Intelligence
+		lineageTag: 41657d11-e432-4822-978d-e8133c0ac1e2
+
+	measure 'Value YoY %' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			VAR Cur = CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = CurMonth )
+			RETURN DIVIDE ( Cur - [Value PY (Lakh Cr)], [Value PY (Lakh Cr)] )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 240fda91-2091-4fd2-b8f7-7476cb38ee99
+
+	measure 'Volume 3M Rolling Avg (Mn)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    CALCULATE ( AVERAGEX ( VALUES ( dim_date[month_date] ), [Total Volume (Mn)] ),
+			        REMOVEFILTERS ( dim_date ),
+			        dim_date[month_date] > EDATE ( CurMonth, -3 ),
+			        dim_date[month_date] <= CurMonth )
+		formatString: #,0
+		displayFolder: Time Intelligence
+		lineageTag: b12efef4-67d7-427b-ad78-a99d5ae9ea59
+
+	measure 'Volume FYTD (Bn)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			VAR CurFY = LOOKUPVALUE ( dim_date[fiscal_year], dim_date[month_date], CurMonth )
+			RETURN
+			    CALCULATE ( [Total Volume (Bn)], REMOVEFILTERS ( dim_date ),
+			        dim_date[fiscal_year] = CurFY, dim_date[month_date] <= CurMonth )
+		formatString: #,0.0
+		displayFolder: Time Intelligence
+		lineageTag: 67135fca-f133-4f88-bc57-4e0eeda770bd
+
+	measure 'Volume CAGR %' =
+			VAR MonthsWithData = FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) )
+			VAR FirstM = MINX ( MonthsWithData, dim_date[month_date] )
+			VAR LastM  = MAXX ( MonthsWithData, dim_date[month_date] )
+			VAR V0 = CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = FirstM )
+			VAR V1 = CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+			VAR Years = DATEDIFF ( FirstM, LastM, MONTH ) / 12
+			RETURN IF ( Years > 0, ( V1 / V0 ) ^ ( 1 / Years ) - 1 )
+		formatString: 0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 8b8fa992-683f-4606-92e8-93e4a3febd15
+
+	measure 'Peak Month' =
+			VAR T = ADDCOLUMNS ( VALUES ( dim_date[month_year] ), "@v", [Total Volume (Mn)] )
+			RETURN MAXX ( TOPN ( 1, T, [@v], DESC ), dim_date[month_year] )
+		displayFolder: Core
+		lineageTag: 965d4fb8-7303-43fe-8213-9fc50c2a7f9c
+
+	measure 'Latest Month Volume (Bn)' =
+			VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN CALCULATE ( [Total Volume (Bn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+		formatString: #,0.0
+		displayFolder: Core
+		lineageTag: f87a8c0f-34a0-433c-9e47-0ee881ef5896
+
+	measure 'Forecast Volume (Bn)' = DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 49a654d4-3458-489b-9653-ed82bb9f2729
+
+	measure 'Forecast Lower 80 (Bn)' = DIVIDE ( CALCULATE ( SUM ( fact_forecast[lower_80_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: aa3374fc-7c85-46df-9019-55b558ed969f
+
+	measure 'Forecast Upper 80 (Bn)' = DIVIDE ( CALCULATE ( SUM ( fact_forecast[upper_80_mn] ), fact_forecast[type] = "Forecast" ), 1000 )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 52e4adb4-f968-4772-82cc-080d7e9f7092
+
+	measure 'Backtest Volume (Bn)' = DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Backtest" ), 1000 )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 210e842b-1eb1-417b-84b0-9dbe052ca9fe
+
+	measure 'Backtest MAPE %' =
+			VAR T =
+			    FILTER (
+			        ADDCOLUMNS ( VALUES ( dim_date[month_date] ),
+			            "@a", [Total Volume (Bn)], "@f", [Backtest Volume (Bn)] ),
+			        NOT ISBLANK ( [@f] ) && NOT ISBLANK ( [@a] ) )
+			RETURN AVERAGEX ( T, ABS ( [@f] - [@a] ) / [@a] )
+		formatString: 0.0%
+		displayFolder: Forecast
+		lineageTag: 14acb183-baa7-495e-b60e-c9473fa822bc
+
+	measure 'App Volume Share %' = DIVIDE ( AVERAGEX ( VALUES ( dim_date[month_date] ), CALCULATE ( SUM ( fact_app_share[volume_share_pct] ) ) ), 100 )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: 3c4697d4-1b9e-46b8-a66d-c429819e4d59
+
+	measure 'App Value Share %' = DIVIDE ( AVERAGEX ( VALUES ( dim_date[month_date] ), CALCULATE ( SUM ( fact_app_share[value_share_pct] ) ) ), 100 )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: f492ea6f-280a-4d8e-a619-7c04c31da087
+
+	measure 'Gap to 30% Cap (pp)' = ( [App Volume Share %] - 0.30 ) * 100
+		formatString: 0.0%
+		displayFolder: What-if
+		lineageTag: a9dfca17-7cb4-411a-bdd3-dd4ef429addf
+
+	measure 'Top 2 Share %' = DIVIDE ( AVERAGE ( fact_concentration[top2_share_pct] ), 100 )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: 5c956729-1f9d-479e-be10-61d9a9d9e76f
+
+	measure 'Top 3 Share %' = DIVIDE ( AVERAGE ( fact_concentration[top3_share_pct] ), 100 )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: e54de59c-deeb-484d-a000-6c9e171c535c
+
+	measure 'HHI (lower bound)' = AVERAGE ( fact_concentration[hhi_lower_bound] )
+		formatString: #,0
+		displayFolder: Market
+		lineageTag: 10331c1d-b561-4866-9531-580f875498fc
+
+	measure 'Market Structure' =
+			VAR H = [HHI (lower bound)]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( H ), BLANK (),
+			    H > 2500, "Highly concentrated",
+			    H > 1500, "Moderately concentrated",
+			    "Competitive" )
+		displayFolder: Market
+		lineageTag: 2f693f6a-1761-4848-ae36-e9b546e76d75
+
+	measure 'Apps Above 30% Cap' = MAX ( fact_concentration[apps_above_30pct_cap] )
+		formatString: 0
+		displayFolder: What-if
+		lineageTag: eb2cc07e-4857-42ea-aa9c-5f691f747e1f
+
+	measure 'P2M Volume Share %' =
+			DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2M" ),
+			         SUM ( fact_p2p_p2m[volume_mn] ) )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: 0a924e45-e989-43dc-a330-8de230185a11
+
+	measure 'P2M Value Share %' =
+			DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2M" ),
+			         SUM ( fact_p2p_p2m[value_cr] ) )
+		formatString: 0.0%
+		displayFolder: Market
+		lineageTag: dbb83be3-f3ad-45c3-a5b9-bfb13caaa229
+
+	measure 'P2P Avg Ticket (Rs)' =
+			DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2P" ) * 1e7,
+			         CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2P" ) * 1e6 )
+		formatString: ₹#,0
+		displayFolder: P2P vs P2M
+		lineageTag: 4fd4fbd7-06fd-4fa0-8148-c5b7ceaa90d2
+
+	measure 'P2M Avg Ticket (Rs)' =
+			DIVIDE ( CALCULATE ( SUM ( fact_p2p_p2m[value_cr] ), fact_p2p_p2m[type] = "P2M" ) * 1e7,
+			         CALCULATE ( SUM ( fact_p2p_p2m[volume_mn] ), fact_p2p_p2m[type] = "P2M" ) * 1e6 )
+		formatString: ₹#,0
+		displayFolder: P2P vs P2M
+		lineageTag: dabf6c95-d812-42d7-a1ae-7edd5ac2b14a
+
+	measure 'Data Through' =
+			"Data through " & FORMAT (
+			    MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] ),
+			    "mmm yyyy" )
+		displayFolder: UX
+		lineageTag: 7c376b06-ae34-443f-ab5a-ff9261c27dc2
+
+	measure 'Overview Title' =
+			"UPI processed " & FORMAT ( [Latest Month Volume (Bn)], "0.0" ) & " bn transactions in the latest month - "
+			    & FORMAT ( CALCULATE ( [Volume YoY %], LASTNONBLANK ( dim_date[month_date], [Total Volume (Mn)] ) ), "0%" )
+			    & " up year on year"
+		displayFolder: UX
+		lineageTag: e495d5c4-04cb-45e6-810f-dac86fba4910
+
+	measure 'YoY Colour' = IF ( [Volume YoY %] >= 0.25, "#1F4E79", IF ( [Volume YoY %] >= 0.15, "#6C8EBF", "#E07A1F" ) )
+		displayFolder: Time Intelligence
+		lineageTag: bca5092c-71fd-42a1-8c76-211272c25213
+
+	measure 'Latest Month Value (Lakh Cr)' =
+			VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Value (Lakh Cr)] ) ), dim_date[month_date] )
+			RETURN CALCULATE ( [Total Value (Lakh Cr)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+		formatString: #,0.0
+		displayFolder: Core
+		lineageTag: 2bdbce75-2c04-4208-8195-8294c9d8f4d8
+
+	measure 'Latest Avg Ticket (Rs)' =
+			VAR LastM = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Value (Lakh Cr)] ) ), dim_date[month_date] )
+			RETURN CALCULATE ( [Avg Ticket Size (Rs)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = LastM )
+		formatString: ₹#,0
+		displayFolder: Core
+		lineageTag: 9f09a8c8-4ca8-4ad3-a308-fdc00700f08b
+
+	measure 'Volume Current Month (Mn)' =
+			VAR CurMonth = MAXX ( FILTER ( VALUES ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    CALCULATE ( [Total Volume (Mn)], REMOVEFILTERS ( dim_date ), dim_date[month_date] = CurMonth )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 545d0b5b-aefb-4104-a24d-7f01ba53ceec
+
+	measure 'Forecast Next 12M Total (Bn)' = [Forecast Volume (Bn)]
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: 709632d1-5532-4bac-a134-f2d1a254baa8
+
+	measure 'Forecast End Month Volume (Bn)' =
+			VAR LastF = CALCULATE ( MAX ( fact_forecast[date_key] ), fact_forecast[type] = "Forecast" )
+			RETURN DIVIDE ( CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast", fact_forecast[date_key] = LastF ), 1000 )
+		formatString: #,0.0
+		displayFolder: Forecast
+		lineageTag: e8d7e622-5bf4-4c63-9bae-9e489b4322e4
+
+	measure 'Payment Volume (Mn)' = SUM ( fact_p2p_p2m[volume_mn] )
+		formatString: #,0
+		displayFolder: Core
+		lineageTag: 00f4843e-a944-4cd2-a138-c93fd2eeda5f
+
+	measure 'Payment Value (Lakh Cr)' = DIVIDE ( SUM ( fact_p2p_p2m[value_cr] ), 100000 )
+		formatString: #,0.0
+		displayFolder: Core
+		lineageTag: 31e13764-cbf8-495f-8d94-a18b4e9a8a97
+
+	measure 'Selected Month Label' = IF ( HASONEVALUE ( dim_date[month_year] ), "Month: " & VALUES ( dim_date[month_year] ), "Month: all (drill through from a chart)" )
+		displayFolder: Core
+		lineageTag: 568581ab-e70f-48de-9e98-f0265c38154b
+
+	measure 'Growth Adjustment Value' = SELECTEDVALUE ( 'Growth Adjustment'[Growth Adjustment], 0 )
+		formatString: +0%;-0%;0%
+		displayFolder: What-if
+		lineageTag: b2cb8b41-85a0-4d9c-84f1-1d14f461c249
+
+	measure 'Scenario Forecast (Bn)' =
+			VAR Adj = [Growth Adjustment Value]
+			VAR LastActual = MAXX ( FILTER ( ALL ( dim_date[month_date] ), NOT ISBLANK ( [Total Volume (Mn)] ) ), dim_date[month_date] )
+			RETURN
+			    DIVIDE (
+			        SUMX (
+			            VALUES ( dim_date[month_date] ),
+			            VAR F = CALCULATE ( SUM ( fact_forecast[forecast_volume_mn] ), fact_forecast[type] = "Forecast" )
+			            VAR H = DATEDIFF ( LastActual, dim_date[month_date], MONTH )
+			            RETURN IF ( NOT ISBLANK ( F ), F * ( 1 + Adj ) ^ ( H / 12 ) )
+			        ),
+			        1000
+			    )
+		formatString: #,0.0
+		displayFolder: What-if
+		lineageTag: dcf6930a-4c2e-47bf-824e-55d0c5a4b755
+
+	measure 'Scenario vs Base (Bn)' = [Scenario Forecast (Bn)] - [Forecast Volume (Bn)]
+		formatString: +#,0.0;-#,0.0
+		displayFolder: What-if
+		lineageTag: 7f8226a8-f3b8-4187-9eac-e41f6d4564fb
+
+	measure 'Cap Value' = SELECTEDVALUE ( 'App Cap'[App Cap], 0.30 )
+		formatString: 0%
+		displayFolder: What-if
+		lineageTag: 139a0598-0fe0-4a50-9467-24bffc904b47
+
+	measure 'Cap Colour' = IF ( [App Volume Share %] > [Cap Value], "#C0392B", "#1F4E79" )
+		displayFolder: What-if
+		lineageTag: caa82f2e-1e0f-4d39-a647-48954c2c9a37
+
+	measure 'Share Above Cap (pp)' =
+			SUMX (
+			    FILTER ( VALUES ( dim_app[app] ), dim_app[app] <> "Others" ),
+			    MAX ( 0, [App Volume Share %] - [Cap Value] )
+			) * 100
+		formatString: +0.0;-0.0
+		displayFolder: What-if
+		lineageTag: 55a9055c-bc58-43f7-9431-18f6e40a33cf
+
+	measure 'Apps Over Selected Cap' =
+			COUNTROWS (
+			    FILTER ( VALUES ( dim_app[app] ), dim_app[app] <> "Others" && [App Volume Share %] > [Cap Value] )
+			)
+		formatString: 0
+		displayFolder: What-if
+		lineageTag: 432d793a-9bee-475a-8656-4d0724b35559
+
+	column Value
+		dataType: int64
+		isHidden
+		lineageTag: 7834f604-7e3e-4fbb-898d-251d0fda8099
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Value]
+
+	partition _Measures = calculated
+		mode: import
+		source = {1}
+

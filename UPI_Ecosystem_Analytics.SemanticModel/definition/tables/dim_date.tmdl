@@ -1,0 +1,81 @@
+table dim_date
+	lineageTag: a6ee8b8b-7487-4276-ab28-1135586e62e8
+
+	column month_date
+		dataType: dateTime
+		formatString: mmm yyyy
+		lineageTag: 0dd92e18-51d7-4b12-b930-0ae820fa0771
+		summarizeBy: none
+		sourceColumn: month_date
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 7b27dcd9-b020-4545-bd06-e0452fd92d34
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 45744d46-6f9a-4a0b-a80f-1c1f7019095a
+		summarizeBy: none
+		sourceColumn: year
+
+	column month_num
+		dataType: int64
+		formatString: 0
+		lineageTag: f318886f-b065-4ad8-8dfd-b420081a011d
+		summarizeBy: none
+		sourceColumn: month_num
+
+	column month_name
+		dataType: string
+		lineageTag: b1906648-2514-4d3b-b0c4-00ce2bb1b5db
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_num
+
+	column month_year
+		dataType: string
+		lineageTag: bf93e836-e482-4768-bc99-ab30fdd1d590
+		summarizeBy: none
+		sourceColumn: month_year
+		sortByColumn: month_date
+
+	column fiscal_year
+		dataType: string
+		lineageTag: 21049805-a159-4b10-bf80-5c8c64f0b188
+		summarizeBy: none
+		sourceColumn: fiscal_year
+
+	column fiscal_month_num
+		dataType: int64
+		formatString: 0
+		lineageTag: 3675cf49-7cd3-4d34-a1a9-69b9af05ef8c
+		summarizeBy: none
+		sourceColumn: fiscal_month_num
+
+	column fiscal_quarter
+		dataType: string
+		lineageTag: 2471496c-9dd6-49a8-bcc0-e5b15d3939b7
+		summarizeBy: none
+		sourceColumn: fiscal_quarter
+
+	column is_festive_season
+		dataType: string
+		lineageTag: 588628a9-3030-4952-8d9c-a5c6ab8f56e9
+		summarizeBy: none
+		sourceColumn: is_festive_season
+
+	partition dim_date = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "dim_date.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"month_date", type date}, {"date_key", Int64.Type}, {"year", Int64.Type}, {"month_num", Int64.Type}, {"month_name", type text}, {"month_year", type text}, {"fiscal_year", type text}, {"fiscal_month_num", Int64.Type}, {"fiscal_quarter", type text}, {"is_festive_season", type text}}, "en-US")
+				in
+				    Typed
+

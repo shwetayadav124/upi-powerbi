@@ -1,0 +1,24 @@
+relationship rel_fact_upi_monthly_date
+	fromColumn: fact_upi_monthly.date_key
+	toColumn: dim_date.date_key
+
+relationship rel_fact_forecast_date
+	fromColumn: fact_forecast.date_key
+	toColumn: dim_date.date_key
+
+relationship rel_fact_app_share_date
+	fromColumn: fact_app_share.date_key
+	toColumn: dim_date.date_key
+
+relationship rel_fact_concentration_date
+	fromColumn: fact_concentration.date_key
+	toColumn: dim_date.date_key
+
+relationship rel_fact_p2p_p2m_date
+	fromColumn: fact_p2p_p2m.date_key
+	toColumn: dim_date.date_key
+
+relationship rel_app_share_app
+	fromColumn: fact_app_share.app_id
+	toColumn: dim_app.app_id
+

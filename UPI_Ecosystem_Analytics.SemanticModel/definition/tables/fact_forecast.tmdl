@@ -1,0 +1,51 @@
+table fact_forecast
+	lineageTag: b30da601-4dea-49d3-9d82-f0db8b39fc15
+
+	column date_key
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 40955d6a-ab13-4366-b382-029846d944d6
+		summarizeBy: none
+		sourceColumn: date_key
+
+	column type
+		dataType: string
+		lineageTag: fb4e97de-13e9-49e8-9c75-ef5f55859c6b
+		summarizeBy: none
+		sourceColumn: type
+
+	column forecast_volume_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: e41492fa-12f1-485c-b3ac-c047ea3aca19
+		summarizeBy: sum
+		sourceColumn: forecast_volume_mn
+
+	column lower_80_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 044399a7-8c4a-46b4-b5dc-c6493cab1c7a
+		summarizeBy: sum
+		sourceColumn: lower_80_mn
+
+	column upper_80_mn
+		dataType: double
+		isHidden
+		formatString: #,0.00
+		lineageTag: 0b3430e1-43fc-4a5c-9685-04c703af091d
+		summarizeBy: sum
+		sourceColumn: upper_80_mn
+
+	partition fact_forecast = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents(DataFolder & "fact_forecast.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"date_key", Int64.Type}, {"type", type text}, {"forecast_volume_mn", type number}, {"lower_80_mn", type number}, {"upper_80_mn", type number}}, "en-US")
+				in
+				    Typed
+

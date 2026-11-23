@@ -1,0 +1,16 @@
+table 'App Cap'
+	lineageTag: c1c236a8-b589-4b1f-ae49-1c1819ec112a
+
+	column 'App Cap'
+		dataType: double
+		formatString: 0%
+		lineageTag: 9b9eff5e-4ef8-417a-b14b-baa9680c2cda
+		summarizeBy: none
+		sourceColumn: [Value]
+
+	partition 'App Cap' = calculated
+		mode: import
+		source = GENERATESERIES ( 0.20, 0.50, 0.05 )
+
+	annotation PBI_Id = what_if_app_cap
+

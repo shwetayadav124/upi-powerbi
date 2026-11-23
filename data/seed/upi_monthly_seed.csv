@@ -1,0 +1,50 @@
+month,banks_live,volume_mn,value_cr,source
+2022-10,,7310.0,1211000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2022-11,,7310.0,1190000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2022-12,,7830.0,1282000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-01,,8040.0,1298000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-02,,7530.0,1236000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-03,,8690.0,1410000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-04,,8900.0,1407000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-05,,9420.0,1489000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-06,,9340.0,1475000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-07,,9960.0,1534000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-08,,10590.0,1576000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-09,,10560.0,1580000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-10,,11410.0,1716000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-11,,11240.0,1740000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2023-12,,12020.0,1823000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-01,,12200.0,1841000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-02,,12100.0,1828000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-03,,13440.0,1978000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-04,,13304.0,1964000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-05,,14035.8,2045000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-06,,13885.1,2007000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-07,,14435.55,2064292.4,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-08,,14963.0,2061000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-09,,15041.7,2064000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-10,,16580.0,2349000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-11,,15480.0,2155000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2024-12,,16730.0,2325000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-01,,16990.0,2348000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-02,,16110.0,2196000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-03,,18300.0,2477000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-04,,17890.0,2395000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-05,,18680.0,2514000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-06,,18400.0,2404000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-07,,19470.0,2508000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-08,,20010.0,2485000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-09,,19630.0,2490000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-10,,20700.0,2728000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-11,,20470.0,2632000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2025-12,,21630.0,2797000.0,NPCI (volume via India Dispatch; value via NPCI releases reported by PTI/Business Standard/Inc42/MoF)
+2026-01,691.0,21703.44,2833481.22,NPCI via Dataful #432
+2026-02,694.0,20394.18,2684229.29,NPCI via Dataful #432
+2026-03,705.0,22641.11,2952542.05,NPCI via Dataful #432
+2026-04,713.0,22346.8,2902988.05,NPCI via Dataful #432
+2026-05,720.0,23201.93,2990424.21,NPCI via Dataful #432
+2026-06,731.0,22716.07,2892138.67,NPCI via Dataful #432
+2026-07,741.0,23658.35,2987880.49,NPCI via Dataful #432
+2026-08,752.0,24508.96,2982355.95,NPCI via Dataful #432
+2026-09,756.0,24068.38,2937396.67,NPCI via Dataful #432
+2026-10,758.0,25466.7,3152929.46,NPCI via Dataful #432

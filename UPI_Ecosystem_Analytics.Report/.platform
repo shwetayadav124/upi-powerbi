@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "UPI_Ecosystem_Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6debd73d-e45e-4a94-8a85-b5ee55df611e"
+  }
+}
